@@ -1,6 +1,10 @@
 import java.io.File;
 
 public class Code {
+    /**
+     * @param dest - Symbolic destination of C instruction.
+     * @return Binary representation of parameter (null if empty).
+     */
     public static String dest(String dest) {
         if (dest != null) {
             StringBuilder builder = new StringBuilder();
@@ -15,6 +19,10 @@ public class Code {
             return "000";
     }
 
+    /**
+     * @param jump - Symbolic jump portion of C instruction.
+     * @return Binary representation of parameter (null if empty).
+     */
     public static String jump(String jump) {
         if (jump != null) {
             switch (jump) {
@@ -41,6 +49,10 @@ public class Code {
 
     }
 
+    /**
+     * @param comp - Symbolic comp portion of C instruction.
+     * @return Binary representation of parameter.
+     */
     public static String comp(String comp) {
         switch (comp) {
             case "0":
