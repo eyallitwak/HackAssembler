@@ -1,6 +1,10 @@
 import java.util.HashMap;
 
 public class SymbolTable extends HashMap<String, Integer> {
+    private static final int DATA_UPPER_LIMIT = 16384;
+
+    private int symbolsAdded = 16;
+
     public SymbolTable() {
         super();
         addEntry("R0", 0);
@@ -30,6 +34,15 @@ public class SymbolTable extends HashMap<String, Integer> {
 
     public void addEntry(String symbol, int address) {
         this.put(symbol, address);
+    }
+
+    public void addEntry(String symbol) {
+        if (symbolsAdded + 1 == DATA_UPPER_LIMIT) {
+            throw new RuntimeException();
+        } else {
+            addEntry(symbol, symbolsAdded);
+            symbolsAdded++;
+        }
     }
 
     public boolean contains(String symbol) {
