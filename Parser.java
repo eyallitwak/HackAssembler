@@ -12,14 +12,18 @@ import java.io.LineNumberReader;
 public class Parser {
     private LineNumberReader reader;
     private String currentInstruction;
+    private String nextInstruction;
 
     /**
-     * @param file - The file that Parser reads from
+     * @param sourceFile - The file that Parser reads from
      */
-    public Parser(File file) {
+    public Parser(File sourceFile) {
         try {
-            this.reader = new LineNumberReader(new FileReader(file));
-            this.currentInstruction = this.reader.readLine();
+            this.reader = new LineNumberReader(new FileReader(sourceFile));
+            this.currentInstruction = null;
+            this.nextInstruction = getNextLine();
+            advance();
+
         } catch (Exception e) {
             System.out.println("Error while initializing Parser");
             e.printStackTrace();
@@ -41,12 +45,46 @@ public class Parser {
      */
     public boolean advance() {
         try {
-            this.currentInstruction = this.reader.readLine();
+            this.currentInstruction = this.nextInstruction;
+            this.nextInstruction = getNextLine();
             return true;
         } catch (Exception e) {
             System.out.println("Error while advancing the instruction");
             e.printStackTrace();
             return false;
+        }
+    }
+
+    /**
+     * Factory method to manage skipping of comments and whitespace
+     * 
+     * @return next line that isn't a comment or whitespace
+     */
+    private String getNextLine() {
+        try {
+            String nextLine;
+            do {
+                nextLine = reader.readLine();
+                if (nextLine == null) {
+                    return null;
+                }
+            } while (nextLine.length() == 0 || nextLine.charAt(0) == '/');
+
+            int commentIndex = nextLine.indexOf('/');
+            int spaceIndex = nextLine.indexOf(" ");
+            if (commentIndex != -1) {
+                if (spaceIndex != -1) {
+                    int stopIndex = (spaceIndex < commentIndex) ? spaceIndex : commentIndex;
+                    nextLine = nextLine.substring(0, stopIndex);
+                } else {
+                    nextLine = nextLine.substring(0, commentIndex);
+                }
+            }
+            return nextLine;
+        } catch (IOException e) {
+            System.out.println("Error while getting next line");
+            e.printStackTrace();
+            return null;
         }
     }
 
