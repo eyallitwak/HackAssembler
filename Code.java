@@ -45,7 +45,7 @@ public class Code {
                     return null;
             }
         } else
-            return null;
+            return "000";
 
     }
 
