@@ -6,13 +6,16 @@ public class HackAssembler {
 
     public static void firstPass(File sourceFile) {
         Parser parser = new Parser(sourceFile);
+        int lines = 0, symCount = 0;
 
         while (parser.hasMoreLines()) {
             String type = parser.instructionType();
+            lines++;
             if (type.equals("L_INSTRUCTION")) {
                 String symbol = parser.symbol();
                 if (!table.contains(symbol)) {
-                    table.addEntry(symbol);
+                    symCount++;
+                    table.addEntry(symbol, lines - symCount);
                 }
             }
             parser.advance();
@@ -87,7 +90,7 @@ public class HackAssembler {
     }
 
     public static void main(String[] args) {
-        File sourceFile = new File("Prog.asm");
+        File sourceFile = new File("Pong.asm");
         firstPass(sourceFile);
         secondPass(sourceFile);
 
