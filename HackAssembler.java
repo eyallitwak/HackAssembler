@@ -26,10 +26,14 @@ public class HackAssembler {
     public static void secondPass(File sourceFile) {
         try {
             Parser parser = new Parser(sourceFile);
-            String fileName = sourceFile.getName();
-            fileName = fileName.substring(0, fileName.indexOf('.'));
-            fileName = fileName + ".hack";
-            File hackFile = new File(fileName);
+            // String fileName = sourceFile.getName();
+            // fileName = fileName.substring(0, fileName.indexOf('.'));
+            // fileName = fileName + ".hack";
+
+            String name = sourceFile.getAbsolutePath().substring(0, sourceFile.getAbsolutePath().lastIndexOf("."));
+            name = name.concat(".hack");
+
+            File hackFile = new File(name);
 
             if (hackFile.exists()) {
                 hackFile.delete();
@@ -90,7 +94,7 @@ public class HackAssembler {
     }
 
     public static void main(String[] args) {
-        File sourceFile = new File("Pong.asm");
+        File sourceFile = new File("Max.asm");
         firstPass(sourceFile);
         secondPass(sourceFile);
 
