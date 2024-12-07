@@ -68,6 +68,7 @@ public class Parser {
                 if (nextLine == null) {
                     return null;
                 }
+                nextLine = nextLine.trim();
             } while (nextLine.length() == 0 || nextLine.charAt(0) == '/');
 
             int commentIndex = nextLine.indexOf('/');
