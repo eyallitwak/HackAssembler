@@ -2,9 +2,9 @@ import java.io.File;
 import java.io.FileWriter;
 
 public class HackAssembler {
-    public static SymbolTable table = new SymbolTable();
+    private SymbolTable table = new SymbolTable();
 
-    public static void firstPass(File sourceFile) {
+    public void firstPass(File sourceFile) {
         Parser parser = new Parser(sourceFile);
         int lines = 0, symCount = 0;
 
@@ -23,7 +23,7 @@ public class HackAssembler {
         parser.close();
     }
 
-    public static void secondPass(File sourceFile) {
+    public void secondPass(File sourceFile) {
         try {
             Parser parser = new Parser(sourceFile);
             // String fileName = sourceFile.getName();
@@ -98,12 +98,13 @@ public class HackAssembler {
     }
 
     public static void main(String[] args) {
-        File sourceFile = new File("MaxL.asm");
-        firstPass(sourceFile);
-        secondPass(sourceFile);
+        File sourceFile = new File("Max.asm");
+        HackAssembler assembler =new HackAssembler();
+        assembler.firstPass(sourceFile);
+        assembler.secondPass(sourceFile);
 
-        for (String symbol : table.keySet()) {
-            System.out.println(symbol + " : " + table.getAddress(symbol));
+        for (String symbol : assembler.table.keySet()) {
+            System.out.println(symbol + " : " + assembler.table.getAddress(symbol));
         }
     }
 }
