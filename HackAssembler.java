@@ -80,8 +80,12 @@ public class HackAssembler {
                         instruction = "0" + instruction;
                     }
                 }
-                writer.write(instruction);
-                writer.write('\n');
+
+                if (type.equals("A_INSTRUCTION") || type.equals("C_INSTRUCTION")) {
+                    writer.write(instruction);
+                    writer.write('\n');
+                }
+
                 parser.advance();
             }
 
@@ -94,7 +98,7 @@ public class HackAssembler {
     }
 
     public static void main(String[] args) {
-        File sourceFile = new File("Max.asm");
+        File sourceFile = new File("MaxL.asm");
         firstPass(sourceFile);
         secondPass(sourceFile);
 
