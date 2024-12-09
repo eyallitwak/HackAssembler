@@ -2,3 +2,5 @@
 .vscode
 *.hack
 *.class
+Assembler
+Makefile
