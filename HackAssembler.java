@@ -4,6 +4,11 @@ import java.io.FileWriter;
 public class HackAssembler {
     private SymbolTable table = new SymbolTable();
 
+    /**
+     * Goes through source file and adds labels to SymbolTable
+     * 
+     * @param sourceFile - .asm file to read from
+     */
     public void firstPass(File sourceFile) {
         Parser parser = new Parser(sourceFile);
         int lines = 0, symCount = 0;
@@ -23,18 +28,22 @@ public class HackAssembler {
         parser.close();
     }
 
+    /**
+     * Creates appropriate .hack file and generates binary instructions from source
+     * .asm file
+     * 
+     * @param sourceFile - .asm file to read from
+     */
     public void secondPass(File sourceFile) {
         try {
             Parser parser = new Parser(sourceFile);
-            // String fileName = sourceFile.getName();
-            // fileName = fileName.substring(0, fileName.indexOf('.'));
-            // fileName = fileName + ".hack";
 
             String name = sourceFile.getAbsolutePath().substring(0, sourceFile.getAbsolutePath().lastIndexOf("."));
             name = name.concat(".hack");
 
             File hackFile = new File(name);
 
+            // overwrites an existing .hack file
             if (hackFile.exists()) {
                 hackFile.delete();
             }
@@ -45,6 +54,8 @@ public class HackAssembler {
                 String type = parser.instructionType();
                 StringBuilder builder = new StringBuilder();
                 String instruction = "";
+
+                // constructs the A or C instruction
                 if (type.equals("C_INSTRUCTION")) {
                     String dest = parser.dest(), comp = parser.comp(), jump = parser.jump();
                     dest = Code.dest(dest);
@@ -65,8 +76,8 @@ public class HackAssembler {
                         numericValue = -1;
                     }
 
+                    // takes care of @<variable> A instruction
                     if (numericValue == -1) {
-                        // instruction = Integer.toBinaryString(numericValue);
                         String symbol = parser.symbol();
                         if (!table.contains(symbol)) {
                             table.addEntry(symbol);
@@ -74,6 +85,7 @@ public class HackAssembler {
                         numericValue = table.getAddress(symbol);
                     }
 
+                    // takes care of @<number> A instruction
                     instruction = Integer.toBinaryString(numericValue);
                     int length = instruction.length();
                     for (int i = 0; i < 16 - length; i++) {
@@ -81,6 +93,7 @@ public class HackAssembler {
                     }
                 }
 
+                // prevents writing an empty line if current line is L instruction
                 if (type.equals("A_INSTRUCTION") || type.equals("C_INSTRUCTION")) {
                     writer.write(instruction);
                     writer.write('\n');
@@ -99,7 +112,7 @@ public class HackAssembler {
 
     public static void main(String[] args) {
         File sourceFile = new File("Max.asm");
-        HackAssembler assembler =new HackAssembler();
+        HackAssembler assembler = new HackAssembler();
         assembler.firstPass(sourceFile);
         assembler.secondPass(sourceFile);
 

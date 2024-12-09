@@ -23,6 +23,7 @@ public class Main {
             return;
         }
 
+        // actual proccess
         HackAssembler assembler = new HackAssembler();
         assembler.firstPass(file);
         assembler.secondPass(file);

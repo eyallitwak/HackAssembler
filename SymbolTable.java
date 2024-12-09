@@ -3,6 +3,7 @@ import java.util.HashMap;
 public class SymbolTable extends HashMap<String, Integer> {
     private static final int DATA_UPPER_LIMIT = 16384;
 
+    // keeps track for variables' addresses
     private int symbolsAdded = 16;
 
     public SymbolTable() {
